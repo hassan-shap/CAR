@@ -2,11 +2,11 @@
 
 import kwant
 import numpy as np
-from cmath import exp
-from math import pi
+from math import pi, sqrt, tanh
 import time
 import tinyarray
 from kwant.digest import uniform    # a (deterministic) pseudorandom number generator
+import sys
 
 t=1.0
 t_sc=1.0
