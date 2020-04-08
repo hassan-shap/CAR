@@ -146,13 +146,15 @@ def compute_conductance(syst, energies, params):
 
 def compute_conductance(syst, energies, params):
     # Compute conductance
-    Pe = np.zeros((4,len(energies)))
+    Pu = np.zeros((4,len(energies)))
+    Pd = np.zeros((4,len(energies)))
     for i_e in range(len(energies)):
 #         print(i_e)
         energy=energies[i_e]
         smatrix = kwant.smatrix(syst, energy=energy,params=params)
         for i in range(4):
-            Pe[i,i_e]=smatrix.transmission((1, i), (0, 0))
+            Pu[i,i_e]=smatrix.transmission((1, i), (0, 0))
+            Pd[i,i_e]=smatrix.transmission((1, i), (0, 1))
 
 #         wfs = kwant.wave_function(syst, energy=energy, params=params)
 #         if i_e==0:
@@ -160,7 +162,7 @@ def compute_conductance(syst, energies, params):
 #             print( "Dimension of scattering wf = "+ str(wfs(0).shape) ) 
 #             wf_arr=np.zeros((wfs(0).shape[0],wfs(0).shape[1],len(energies)),dtype=np.complex64)
         
-    return Pe
+    return Pu, Pd
     
 
 def main():
@@ -172,39 +174,39 @@ def main():
     syst = syst.finalized()
 
     # parameters
-    mu=0.18
-    mu_sc= mu+t
+    mu=0.14
+    mu_sc= 0.18+t
     Delta=0.03
     t_j=1.0
     phi=0.0095
     gs=0.
     gn=0.04
     lam=0.5
-    U0=0.3
+    U0=.0
     
     # Compute and plot the conductance
-    Nrep=400
+    Nrep=1
     NE=50
     E_list=np.linspace(-1, 1,NE)*Delta/4
     t0=time.time()
         
     out_dir='kw_data_files_dis/'
-    f1= 'twosided_phi_%.4f_mu_%.2f_mus_%.2f_D_%.2f_tj_%.2f_W_%d_L_%d_Ls_%d' % (phi,mu,mu_sc,Delta,t_j,W,L,Lsc)
+    f1= 'twosided_U_%.2f_phi_%.4f_mu_%.2f_mus_%.2f_D_%.2f_tj_%.2f_W_%d_L_%d_Ls_%d' % (U0,phi,mu,mu_sc,Delta,t_j,W,L,Lsc)
     print(f1)
     f1=out_dir+f1
-    for i_r in range(Nrep):
+    for i_r in range(0,Nrep):
         print(i_r)
         salt=t0+i_r
         params=dict(t_j=t_j, gs=gs, gn=gn, lam=lam, Delta=Delta, U0=U0, salt=salt, mu=mu ,mu_sc=mu_sc, phi=phi)
 
         t_timer=time.time()
         # Compute and plot the conductance
-        Pe = compute_conductance(syst, energies=[E for E in E_list], params=params )
+        Pu,Pd = compute_conductance(syst, energies=[E for E in E_list], params=params )
         elapsed = time.time() - t_timer
         print("Finished, elapsed time = %.0f " % (elapsed)+ "sec")
 
         fname=f1+ '_r_%d.npz' % (i_r)
-        np.savez(fname, E_list=E_list, Pe=Pe)
+        np.savez(fname, E_list=E_list, Pu=Pu , Pd=Pd)
     
 # Call the main function if the script gets executed (as opposed to imported).
 if __name__ == '__main__':

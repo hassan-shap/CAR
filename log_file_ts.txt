@@ -1,0 +1,447 @@
+twosided_phi_0.0095_mu_0.18_mus_1.18_D_0.03_tj_1.00_W_40_L_30_Ls_10
+1
+Finished, elapsed time = 206 sec
+2
+Finished, elapsed time = 207 sec
+3
+Finished, elapsed time = 226 sec
+4
+Finished, elapsed time = 249 sec
+5
+Finished, elapsed time = 209 sec
+6
+Finished, elapsed time = 206 sec
+7
+Finished, elapsed time = 209 sec
+8
+Finished, elapsed time = 205 sec
+9
+Finished, elapsed time = 207 sec
+10
+Finished, elapsed time = 204 sec
+11
+Finished, elapsed time = 207 sec
+12
+Finished, elapsed time = 206 sec
+13
+Finished, elapsed time = 204 sec
+14
+Finished, elapsed time = 207 sec
+15
+Finished, elapsed time = 207 sec
+16
+Finished, elapsed time = 206 sec
+17
+Finished, elapsed time = 206 sec
+18
+Finished, elapsed time = 205 sec
+19
+Finished, elapsed time = 207 sec
+20
+Finished, elapsed time = 208 sec
+21
+Finished, elapsed time = 208 sec
+22
+Finished, elapsed time = 205 sec
+23
+Finished, elapsed time = 206 sec
+24
+Finished, elapsed time = 206 sec
+25
+Finished, elapsed time = 206 sec
+26
+Finished, elapsed time = 206 sec
+27
+Finished, elapsed time = 207 sec
+28
+Finished, elapsed time = 205 sec
+29
+Finished, elapsed time = 203 sec
+30
+Finished, elapsed time = 210 sec
+31
+Finished, elapsed time = 207 sec
+32
+Finished, elapsed time = 205 sec
+33
+Finished, elapsed time = 206 sec
+34
+Finished, elapsed time = 207 sec
+35
+Finished, elapsed time = 207 sec
+36
+Finished, elapsed time = 205 sec
+37
+Finished, elapsed time = 204 sec
+38
+Finished, elapsed time = 209 sec
+39
+Finished, elapsed time = 208 sec
+40
+Finished, elapsed time = 207 sec
+41
+Finished, elapsed time = 205 sec
+42
+Finished, elapsed time = 206 sec
+43
+Finished, elapsed time = 205 sec
+44
+Finished, elapsed time = 210 sec
+45
+Finished, elapsed time = 205 sec
+46
+Finished, elapsed time = 208 sec
+47
+Finished, elapsed time = 206 sec
+48
+Finished, elapsed time = 208 sec
+49
+Finished, elapsed time = 209 sec
+50
+Finished, elapsed time = 209 sec
+51
+Finished, elapsed time = 205 sec
+52
+Finished, elapsed time = 207 sec
+53
+Finished, elapsed time = 207 sec
+54
+Finished, elapsed time = 206 sec
+55
+Finished, elapsed time = 205 sec
+56
+Finished, elapsed time = 209 sec
+57
+Finished, elapsed time = 208 sec
+58
+Finished, elapsed time = 205 sec
+59
+Finished, elapsed time = 205 sec
+60
+Finished, elapsed time = 205 sec
+61
+Finished, elapsed time = 204 sec
+62
+Finished, elapsed time = 206 sec
+63
+Finished, elapsed time = 206 sec
+64
+Finished, elapsed time = 209 sec
+65
+Finished, elapsed time = 207 sec
+66
+Finished, elapsed time = 211 sec
+67
+Finished, elapsed time = 206 sec
+68
+Finished, elapsed time = 205 sec
+69
+Finished, elapsed time = 207 sec
+70
+Finished, elapsed time = 205 sec
+71
+Finished, elapsed time = 207 sec
+72
+Finished, elapsed time = 205 sec
+73
+Finished, elapsed time = 204 sec
+74
+Finished, elapsed time = 205 sec
+75
+Finished, elapsed time = 207 sec
+76
+Finished, elapsed time = 207 sec
+77
+Finished, elapsed time = 210 sec
+78
+Finished, elapsed time = 209 sec
+79
+Finished, elapsed time = 212 sec
+80
+Finished, elapsed time = 213 sec
+81
+Finished, elapsed time = 216 sec
+82
+Finished, elapsed time = 218 sec
+83
+Finished, elapsed time = 211 sec
+84
+Finished, elapsed time = 208 sec
+85
+Finished, elapsed time = 204 sec
+86
+Finished, elapsed time = 204 sec
+87
+Finished, elapsed time = 208 sec
+88
+Finished, elapsed time = 204 sec
+89
+Finished, elapsed time = 206 sec
+90
+Finished, elapsed time = 205 sec
+91
+Finished, elapsed time = 203 sec
+92
+Finished, elapsed time = 204 sec
+93
+Finished, elapsed time = 204 sec
+94
+Finished, elapsed time = 205 sec
+95
+Finished, elapsed time = 205 sec
+96
+Finished, elapsed time = 207 sec
+97
+Finished, elapsed time = 205 sec
+98
+Finished, elapsed time = 205 sec
+99
+Finished, elapsed time = 204 sec
+100
+Finished, elapsed time = 206 sec
+101
+Finished, elapsed time = 207 sec
+102
+Finished, elapsed time = 209 sec
+103
+Finished, elapsed time = 206 sec
+104
+Finished, elapsed time = 209 sec
+105
+Finished, elapsed time = 213 sec
+106
+Finished, elapsed time = 205 sec
+107
+Finished, elapsed time = 210 sec
+108
+Finished, elapsed time = 209 sec
+109
+Finished, elapsed time = 209 sec
+110
+Finished, elapsed time = 205 sec
+111
+Finished, elapsed time = 204 sec
+112
+Finished, elapsed time = 207 sec
+113
+Finished, elapsed time = 206 sec
+114
+Finished, elapsed time = 208 sec
+115
+Finished, elapsed time = 207 sec
+116
+Finished, elapsed time = 209 sec
+117
+Finished, elapsed time = 204 sec
+118
+Finished, elapsed time = 207 sec
+119
+Finished, elapsed time = 206 sec
+120
+Finished, elapsed time = 205 sec
+121
+Finished, elapsed time = 204 sec
+122
+Finished, elapsed time = 206 sec
+123
+Finished, elapsed time = 205 sec
+124
+Finished, elapsed time = 208 sec
+125
+Finished, elapsed time = 206 sec
+126
+Finished, elapsed time = 205 sec
+127
+Finished, elapsed time = 206 sec
+128
+Finished, elapsed time = 208 sec
+129
+Finished, elapsed time = 205 sec
+130
+Finished, elapsed time = 204 sec
+131
+Finished, elapsed time = 208 sec
+132
+Finished, elapsed time = 206 sec
+133
+Finished, elapsed time = 205 sec
+134
+Finished, elapsed time = 204 sec
+135
+Finished, elapsed time = 206 sec
+136
+Finished, elapsed time = 207 sec
+137
+Finished, elapsed time = 203 sec
+138
+Finished, elapsed time = 205 sec
+139
+Finished, elapsed time = 205 sec
+140
+Finished, elapsed time = 204 sec
+141
+Finished, elapsed time = 205 sec
+142
+Finished, elapsed time = 207 sec
+143
+Finished, elapsed time = 210 sec
+144
+Finished, elapsed time = 208 sec
+145
+Finished, elapsed time = 209 sec
+146
+Finished, elapsed time = 206 sec
+147
+Finished, elapsed time = 204 sec
+148
+Finished, elapsed time = 205 sec
+149
+Finished, elapsed time = 206 sec
+150
+Finished, elapsed time = 206 sec
+151
+Finished, elapsed time = 207 sec
+152
+Finished, elapsed time = 204 sec
+153
+Finished, elapsed time = 205 sec
+154
+Finished, elapsed time = 205 sec
+155
+Finished, elapsed time = 206 sec
+156
+Finished, elapsed time = 206 sec
+157
+Finished, elapsed time = 207 sec
+158
+Finished, elapsed time = 204 sec
+159
+Finished, elapsed time = 207 sec
+160
+Finished, elapsed time = 209 sec
+161
+Finished, elapsed time = 206 sec
+162
+Finished, elapsed time = 207 sec
+163
+Finished, elapsed time = 205 sec
+164
+Finished, elapsed time = 205 sec
+165
+Finished, elapsed time = 207 sec
+166
+Finished, elapsed time = 211 sec
+167
+Finished, elapsed time = 206 sec
+168
+Finished, elapsed time = 204 sec
+169
+Finished, elapsed time = 208 sec
+170
+Finished, elapsed time = 206 sec
+171
+Finished, elapsed time = 204 sec
+172
+Finished, elapsed time = 206 sec
+173
+Finished, elapsed time = 205 sec
+174
+Finished, elapsed time = 208 sec
+175
+Finished, elapsed time = 206 sec
+176
+Finished, elapsed time = 205 sec
+177
+Finished, elapsed time = 206 sec
+178
+Finished, elapsed time = 204 sec
+179
+Finished, elapsed time = 207 sec
+180
+Finished, elapsed time = 209 sec
+181
+Finished, elapsed time = 211 sec
+182
+Finished, elapsed time = 211 sec
+183
+Finished, elapsed time = 211 sec
+184
+Finished, elapsed time = 207 sec
+185
+Finished, elapsed time = 204 sec
+186
+Finished, elapsed time = 209 sec
+187
+Finished, elapsed time = 207 sec
+188
+Finished, elapsed time = 203 sec
+189
+Finished, elapsed time = 208 sec
+190
+Finished, elapsed time = 206 sec
+191
+Finished, elapsed time = 206 sec
+192
+Finished, elapsed time = 210 sec
+193
+Finished, elapsed time = 208 sec
+194
+Finished, elapsed time = 205 sec
+195
+Finished, elapsed time = 207 sec
+196
+Finished, elapsed time = 209 sec
+197
+Finished, elapsed time = 206 sec
+198
+Finished, elapsed time = 205 sec
+199
+Finished, elapsed time = 207 sec
+200
+Finished, elapsed time = 203 sec
+201
+Finished, elapsed time = 206 sec
+202
+Finished, elapsed time = 206 sec
+203
+Finished, elapsed time = 204 sec
+204
+Finished, elapsed time = 208 sec
+205
+Finished, elapsed time = 206 sec
+206
+Finished, elapsed time = 207 sec
+207
+Finished, elapsed time = 206 sec
+208
+Finished, elapsed time = 211 sec
+209
+Finished, elapsed time = 213 sec
+210
+Finished, elapsed time = 206 sec
+211
+Finished, elapsed time = 209 sec
+212
+Finished, elapsed time = 208 sec
+213
+Finished, elapsed time = 208 sec
+214
+Finished, elapsed time = 204 sec
+215
+Finished, elapsed time = 204 sec
+216
+Finished, elapsed time = 206 sec
+217
+Finished, elapsed time = 207 sec
+218
+Finished, elapsed time = 210 sec
+219
+Finished, elapsed time = 207 sec
+220
+Finished, elapsed time = 205 sec
+221
+Finished, elapsed time = 208 sec
+222
+Finished, elapsed time = 207 sec
+223
+Finished, elapsed time = 206 sec
