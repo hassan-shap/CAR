@@ -1,0 +1,3 @@
+twosided_U_0.00_phi_0.0095_mu_0.33_mus_0.18_D_0.03_tj_1.00_W_40_L_100_Ls_10_Llead_50
+0
+Finished, elapsed time = 2915 sec

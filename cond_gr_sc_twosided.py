@@ -19,9 +19,8 @@ tau_x = tinyarray.array([[0, 1], [1, 0]])
 tau_y = tinyarray.array([[0, -1j], [1j, 0]])
 tau_z = tinyarray.array([[1, 0], [0, -1]])
 
-
 def make_system(Delta=0.2, salt=13, U0=0.0, gn=0.0, gs=0.0, lam=0.0,
-                W=200, L=200, Lsc=20, t_j=0.1, mu=0.6, mu_sc=2,mu_lead=0.6, phi=0):
+                W=200, L=200, Lsc=20, L_lead=20, t_j=0.1, mu=0.6, mu_sc=2,mu_lead=0.6, phi=0):
 
             
     def qh_slab(pos):
@@ -117,14 +116,21 @@ def make_system(Delta=0.2, salt=13, U0=0.0, gn=0.0, gs=0.0, lam=0.0,
     right_lead[(lat_sc(3,-int(Lsq/2)), subB2(0,-int(Lsc/2)-1))] = hopping_jn
 
     
+    def lead_slab(pos):
+        (x, y) = pos 
+        return (0 <= x < W) and (L_lead <= abs(y) < L+Lsc/2)
+    
     c1 = np.diag([-2, -1, 1, 2])
     sym_left = kwant.TranslationalSymmetry(lat.vec((1, 0)))
     l1_lead = kwant.Builder(sym_left, conservation_law=c1, particle_hole=np.kron(tau_x,np.eye(2)))
-    l1_lead[lat.shape(qh_slab, (0,int(Lsc/2)))] = onsite_lead
+#     l1_lead[lat.shape(qh_slab, (0,int(Lsc/2)))] = onsite_lead
+    l1_lead[lat.shape(lead_slab, (0,L_lead))] = onsite_lead
     l2_lead = kwant.Builder(sym_left, conservation_law=c1, particle_hole=np.kron(tau_x,np.eye(2)))
-    l2_lead[lat.shape(qh_slab, (0,-int(Lsc/2)))] = onsite_lead
+#     l2_lead[lat.shape(qh_slab, (0,-int(Lsc/2)))] = onsite_lead
+    l2_lead[lat.shape(lead_slab, (0,-L_lead))] = onsite_lead
     l1_lead[lat.neighbors()] = hopping_ab
     l2_lead[lat.neighbors()] = hopping_ab
+
 
     syst.attach_lead(l1_lead.reversed())
     syst.attach_lead(l2_lead.reversed())
@@ -167,31 +173,32 @@ def compute_conductance(syst, energies, params):
 
 def main():
     W=40
-    L=30
+    L=100
     Lsc=10
-    syst = make_system(W=W, L=L, Lsc=Lsc)
+    Llead=50
+    syst = make_system(W=W, L=L, Lsc=Lsc, L_lead=Llead)
     # Finalize the system.
     syst = syst.finalized()
 
     # parameters
-    mu=0.14
-    mu_sc= 0.18+t
+    mu=0.32515152 #  for nu=4 # 0.214 # for nu=2  
+    lam=0.5
+    mu_sc= 0.18+t - 2*lam
     Delta=0.03
     t_j=1.0
     phi=0.0095
     gs=0.
     gn=0.04
-    lam=0.5
     U0=.0
     
     # Compute and plot the conductance
     Nrep=1
-    NE=50
+    NE=51
     E_list=np.linspace(-1, 1,NE)*Delta/4
     t0=time.time()
         
     out_dir='kw_data_files_dis/'
-    f1= 'twosided_U_%.2f_phi_%.4f_mu_%.2f_mus_%.2f_D_%.2f_tj_%.2f_W_%d_L_%d_Ls_%d' % (U0,phi,mu,mu_sc,Delta,t_j,W,L,Lsc)
+    f1= 'twosided_U_%.2f_phi_%.4f_mu_%.2f_mus_%.2f_D_%.2f_tj_%.2f_W_%d_L_%d_Ls_%d_Llead_%d' % (U0,phi,mu,mu_sc,Delta,t_j,W,L,Lsc,Llead)
     print(f1)
     f1=out_dir+f1
     for i_r in range(0,Nrep):
