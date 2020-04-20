@@ -189,23 +189,65 @@ def sample_modes(Nx,Lx,Ls,lead_sample,E,params):
         i_n= i_prop1[i_prop2[i_prop3[in_T]]]
         return evs[i_p],evs[i_n]
 
+def plane_waves(Nx,Lx,Ls,prop,elec_hole, top_bottom):
+    kx=np.reshape(2*pi*np.arange(Nx)/(2*Lx+Ls)-pi*Nx/(2*Lx+Ls),[Nx,1])
+    kxp=np.reshape(4*pi*np.arange(Nx)/(2*Lx+Ls)-1*pi*Nx/(2*Lx+Ls),[Nx,1])
+    evec=np.zeros((16*Nx,2*Nx), dtype=np.complex64)
+    if elec_hole=='elec':
+        v_p=np.kron(np.array([[1],[0]]),np.eye(4))
+        v_pos=np.array([[1],[1j*prop]])/sqrt(2)
+    elif elec_hole=='hole':
+        v_p=np.kron(np.array([[0],[1]]),np.eye(4))
+        v_pos=np.array([[1],[-1j*prop]])/sqrt(2)
+    if top_bottom==  'top':   
+        for n in range(0,int(Nx/2)):
+            with np.errstate(divide='ignore', invalid='ignore'):
+                c= (np.exp(-1j*(kxp[n]-kx)*(Lx+Ls/2))-1 )/(-1j*(kxp[n]-kx))/(2*Lx+Ls)
+                c[ ~ np.isfinite( c )] = 1/2           
+            evec[:,4*n:4*n+4]= np.kron(v_p,np.kron(c,v_pos))/np.linalg.norm(c)
+    elif top_bottom==  'bottom':   
+        for n in range(0,int(Nx/2)):
+            with np.errstate(divide='ignore', invalid='ignore'):
+                c= (np.exp(1j*(kxp[n]-kx)*(Lx+Ls/2))-1 )/(1j*(kxp[n]-kx))/(2*Lx+Ls)
+                c[ ~ np.isfinite( c )] = 1/2           
+            evec[:,4*n:4*n+4]= np.kron(v_p,np.kron(c,v_pos))/np.linalg.norm(c)
+    return evec
 
+def plane_waves_T(Nx,Nd,Ld,Lx,Ls):
+    kx=np.reshape(2*pi*np.arange(Nx)/(2*Lx+Ls)-pi*Nx/(2*Lx+Ls),[Nx,1])
+    kxp=np.reshape(2*pi*np.arange(Nd)/Ld-pi*Nd/Ld,[Nd,1])
+    evec=np.zeros((16*Nx,4*Nd), dtype=np.complex64)
+    v_p=np.kron(np.array([[1],[0]]),np.eye(4))
+    v_pos=np.array([[1],[1j]])/sqrt(2)
+    for n in range(0,Nd):
+        with np.errstate(divide='ignore', invalid='ignore'):
+            c= (np.exp(1j*(kxp[n]-kx)*Ls/2)-np.exp(1j*(kxp[n]-kx)*(Ld+Ls/2)) )/(-1j*(kxp[n]-kx))
+            c[ ~ np.isfinite( c )] = Ld          
+        evec[:,4*n:4*n+4]= np.kron(v_p,np.kron(c.conj(),v_pos))/np.linalg.norm(c)
+    return evec
 
+def y0out(k,Ld,Lx,Ls):
+    with np.errstate(divide='ignore', invalid='ignore'):
+        c= (np.exp(1j*k*Ls/2)-np.exp(1j*k*(Ld+Ls/2)) )/(-1j*k)/(2*Lx+Ls)
+        c[ ~ np.isfinite( c )] = Ld/(2*Lx+Ls)
+    return c
+
+    
 def main():
 
     Ls=6*lB
-    Lx=10*lB
-    Nx=100
+    Lx=8*lB
+    Nx=200
 
     D1=0.5*hwc #10*meV
-    D2=0.3*hwc #10*meV
+    D2=0.6*hwc #10*meV
     m_n=0.1*hwc
 
-    lRx= 0.5*hwc
+    lRx= 1.0*hwc
     lRy= 0.*hwc
     lso= 0.*hwc
     gs=0.0*hwc
-    gn=0.2*hwc
+    gn=0.3*hwc
 
     E_sample=1e-3*hwc
     m_sc=3*hwc 
@@ -213,25 +255,44 @@ def main():
     params=dict(nu=0, m_n=m_n, mu_sc=mu_sc, m_sc=m_sc, D1=D1, D2=D2,\
                 lRx=lRx, lRy=lRy, lso=lso, gs=gs, gn=gn)
     
-    E_lead= 0.00*hwc
-    m_sc_lead=10*hwc
-    mu_sc_lead=0*hwc
-    params_lead=dict(nu=0, m_n=m_n, mu_sc=mu_sc_lead, m_sc=m_sc_lead, D1=0, D2=0,\
-                lRx=lRx, lRy=lRy, lso=lso, gs=gs, gn=gn)
-
-    nu_sw=np.linspace(0.11,1,100)
-
+    nu_sw=np.linspace(0.2,1.6,50)
+#     nu_sw=np.linspace(0.8,1.6,24)
+#     nu_sw=np.array([0.2])
+    
     Ree=np.zeros(len(nu_sw))
     Reh=np.zeros(len(nu_sw))
 
     
     out_dir='cont_data_files/'
-    f1='cond_vs_mu_El_%.3f_Nx_%d_Lxs_%d_%d_mn_%.2f_ms_%.2f_mus_%.2f_D12_%.2f_%.2f_lxys_%.2f_%.2f_%.2f_gsn_%.2f_%.2f.npz' %\
-          (E_lead/hwc,Nx,Lx/lB,Ls/lB,m_n/hwc,m_sc/hwc,mu_sc/hwc,\
+    f1='cond_paw_vs_mu_Nx_%d_Lxs_%d_%d_mn_%.2f_ms_%.2f_mus_%.2f_D12_%.2f_%.2f_lxys_%.2f_%.2f_%.2f_gsn_%.2f_%.2f.npz' %\
+          (Nx,Lx/lB,Ls/lB,m_n/hwc,m_sc/hwc,mu_sc/hwc,\
            D1/hwc,D2/hwc,lRx/hwc,lRy/hwc,lso/hwc,gs/hwc,gn/hwc)
 
     print(f1)
     fname=out_dir+f1
+
+    v_p=np.array([[1],[0]])
+    v_h=np.array([[0],[1]])
+    v_pos=np.array([[1],[1j]])/sqrt(2)
+    v_neg=np.array([[1],[-1j]])/sqrt(2)
+    Revecs_l_p=np.kron(v_p,np.kron(np.eye(4*Nx),v_neg))
+    Revecs_l_h=np.kron(v_h,np.kron(np.eye(4*Nx),v_pos))
+    Revecs_l= np.concatenate((Revecs_l_p,Revecs_l_h),axis=1)
+    [k1,k2]=2*pi*np.mgrid[range(Nx),range(Nx)]/(2*Lx+Ls)-pi*Nx/(2*Lx+Ls)
+#     Xmat=np.kron(s00,y0(k2-k1,Lx,Ls))
+
+#     Revecs_l1_p=plane_waves(Nx,Lx,Ls,-1,'elec', 'bottom')
+#     Revecs_l2_p=plane_waves(Nx,Lx,Ls,-1,'elec', 'top')
+#     Revecs_l1_h=plane_waves(Nx,Lx,Ls,-1,'hole', 'bottom')
+#     Revecs_l2_h=plane_waves(Nx,Lx,Ls,-1,'hole', 'top')
+#     Revecs_l= np.concatenate((Revecs_l1_p,Revecs_l1_h,Revecs_l2_p,Revecs_l2_h),axis=1)
+
+#     Nd= int(Nx/4)
+    Ld=Lx
+#     Tevecs_l= plane_waves_T(Nx,Nd,Ld,Lx,Ls)
+    Xmat=np.kron(s00,y0out(k2-k1,Ld,Lx,Ls))
+    Tevecs_l=np.kron(v_p,np.kron(np.eye(4*Nx),v_pos))
+
 
     t_timer=time.time()
 
@@ -239,25 +300,27 @@ def main():
         nu=nu_sw[i_m]
         print(i_m,nu)#,end='\r')
         
-        params_lead['nu']=nu
-        num_refl,Revecs_l,Tevecs_l= sample_modes(Nx,Lx,Ls,'lead',E_lead,params_lead)
-        print('Re (%d) Rh (%d) T (%d)' % (num_refl[0],num_refl[1]-num_refl[0], Tevecs_l.shape[1]))
-
         params['nu']=nu
         Tevecs= sample_modes(Nx,Lx,Ls,'sample',E_sample,params)
         if Tevecs.shape[1]!=8*Nx:
             print('sample T (%d)' % (Tevecs.shape[1]))
 
-        Psi_t=np.concatenate((-Revecs_l,Tevecs),axis=1)
+        Psi_t=np.concatenate((-Revecs_l,Tevecs),axis=1) #+ 1j*8e-1*np.eye(16*Nx)
         x=sp.linalg.solve(Psi_t,Tevecs_l)
 
-        if x.shape[1]>1:
-            Ree[i_m] = np.sum(np.sum(np.abs(x[:num_refl[0],:])**2,axis=0))
-            Reh[i_m] = np.sum(np.sum(np.abs(x[num_refl[0]:num_refl[1],:])**2,axis=0))
-        else:
-            Ree[i_m] = np.sum(np.abs(x[:num_refl[0]])**2,axis=0)
-            Reh[i_m] = np.sum(np.abs(x[num_refl[0]:num_refl[1]])**2,axis=0)
+#         Ree[i_m]=np.real(np.trace(np.dot(np.matrix(x[:4*Nx,:]).H,x[:4*Nx,:])))
+#         Reh[i_m]=np.real(np.trace(np.dot(np.matrix(x[4*Nx:8*Nx,:]).H,x[4*Nx:8*Nx,:])))
+#         Ree[i_m]=np.real(np.trace(np.dot(np.matrix(x[:4*Nx,:]).H,np.dot(Xmat,x[:4*Nx,:]))) )
+#         Reh[i_m]=np.real(np.trace(np.dot(np.matrix(x[4*Nx:8*Nx,:]).H,np.dot(Xmat,x[4*Nx:8*Nx,:]))) )
+        Ree[i_m]=np.real( np.trace( np.dot( x[:4*Nx,:], np.dot(np.dot(Xmat.conj(),np.matrix(x[:4*Nx,:]).H ) , Xmat ) ) ))
+        Reh[i_m]=np.real( np.trace( np.dot( x[4*Nx:8*Nx,:], np.dot(np.dot(Xmat.conj(),np.matrix(x[4*Nx:8*Nx,:]).H ) , Xmat ) ) ))
 
+
+#         Ree[i_m]=np.real(np.trace(np.dot(np.matrix(x[:2*Nx,:]).H,x[:2*Nx,:])))
+#         Reh[i_m]=np.real(np.trace(np.dot(np.matrix(x[2*Nx:4*Nx,:]).H,x[2*Nx:4*Nx,:])))
+
+        print('hole: ', Reh[i_m])
+        print('ptcl: ', Ree[i_m])
     np.savez(fname, nu_list=nu_sw, Ree=Ree , Reh=Reh)
 
     elapsed = time.time() - t_timer
@@ -266,4 +329,5 @@ def main():
 # Call the main function if the script gets executed (as opposed to imported).
 if __name__ == '__main__':
     main()
+
 

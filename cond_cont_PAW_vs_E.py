@@ -189,17 +189,29 @@ def sample_modes(Nx,Lx,Ls,lead_sample,E,params):
         i_n= i_prop1[i_prop2[i_prop3[in_T]]]
         return evs[i_p],evs[i_n]
 
+def plane_waves_T(Nx,Nd,Ld,Lx,Ls):
+    kx=np.reshape(2*pi*np.arange(Nx)/(2*Lx+Ls)-pi*Nx/(2*Lx+Ls),[Nx,1])
+    kxp=np.reshape(2*pi*np.arange(Nd)/Ld-pi*Nd/Ld,[Nd,1])
+    evec=np.zeros((16*Nx,4*Nd), dtype=np.complex64)
+    v_p=np.kron(np.array([[1],[0]]),np.eye(4))
+    v_pos=np.array([[1],[1j]])/sqrt(2)
+    for n in range(0,Nd):
+        with np.errstate(divide='ignore', invalid='ignore'):
+            c= (np.exp(1j*(kxp[n]-kx)*Ls/2)-np.exp(1j*(kxp[n]-kx)*(Ld+Ls/2)) )/(-1j*(kxp[n]-kx))
+            c[ ~ np.isfinite( c )] = Ld          
+        evec[:,4*n:4*n+4]= np.kron(v_p,np.kron(c.conj(),v_pos))/np.linalg.norm(c)
+    return evec
 
 
 def main():
 
     Ls=6*lB
-    Lx=10*lB
-    Nx=100
+    Lx=8*lB
+    Nx=200
 
     D1=0.5*hwc #10*meV
     D2=0.3*hwc #10*meV
-    m_n=0.1*hwc
+    m_n=0.*hwc
 
     lRx= 0.5*hwc
     lRy= 0.*hwc
@@ -207,27 +219,31 @@ def main():
     gs=0.0*hwc
     gn=0.2*hwc
 
-    E_sample=1e-3*hwc
+    nu=0.4
     m_sc=3*hwc 
     mu_sc=8*hwc
-    params=dict(nu=0, m_n=m_n, mu_sc=mu_sc, m_sc=m_sc, D1=D1, D2=D2,\
-                lRx=lRx, lRy=lRy, lso=lso, gs=gs, gn=gn)
-    
-    E_lead= 0.00*hwc
-    m_sc_lead=10*hwc
-    mu_sc_lead=0*hwc
-    params_lead=dict(nu=0, m_n=m_n, mu_sc=mu_sc_lead, m_sc=m_sc_lead, D1=0, D2=0,\
+    params=dict(nu=nu, m_n=m_n, mu_sc=mu_sc, m_sc=m_sc, D1=D1, D2=D2,\
                 lRx=lRx, lRy=lRy, lso=lso, gs=gs, gn=gn)
 
-    nu_sw=np.linspace(0.11,1,100)
+    Esw=np.linspace(-1,1,50)*0.02*hwc
 
-    Ree=np.zeros(len(nu_sw))
-    Reh=np.zeros(len(nu_sw))
+    Ree=np.zeros(len(Esw))
+    Reh=np.zeros(len(Esw))
 
-    
+    v_p=np.array([[1],[0]])
+    v_h=np.array([[0],[1]])
+    v_pos=np.array([[1],[1j]])/sqrt(2)
+    v_neg=np.array([[1],[-1j]])/sqrt(2)
+    Revecs_l_p=np.kron(v_p,np.kron(np.eye(4*Nx),v_neg))
+    Revecs_l_h=np.kron(v_h,np.kron(np.eye(4*Nx),v_pos))
+    Revecs_l= np.concatenate((Revecs_l_p,Revecs_l_h),axis=1)
+    Nd= int(Nx/4)
+    Ld=Lx
+    Tevecs_l= plane_waves_T(Nx,Nd,Ld,Lx,Ls)
+
     out_dir='cont_data_files/'
-    f1='cond_vs_mu_El_%.3f_Nx_%d_Lxs_%d_%d_mn_%.2f_ms_%.2f_mus_%.2f_D12_%.2f_%.2f_lxys_%.2f_%.2f_%.2f_gsn_%.2f_%.2f.npz' %\
-          (E_lead/hwc,Nx,Lx/lB,Ls/lB,m_n/hwc,m_sc/hwc,mu_sc/hwc,\
+    f1='cond_paw_vs_E_Nx_%d_Lxs_%d_%d_nu_%.2f_mn_%.2f_ms_%.2f_mus_%.2f_D12_%.2f_%.2f_lxys_%.2f_%.2f_%.2f_gsn_%.2f_%.2f.npz' %\
+          (Nx,Lx/lB,Ls/lB,nu,m_n/hwc,m_sc/hwc,mu_sc/hwc,\
            D1/hwc,D2/hwc,lRx/hwc,lRy/hwc,lso/hwc,gs/hwc,gn/hwc)
 
     print(f1)
@@ -235,30 +251,18 @@ def main():
 
     t_timer=time.time()
 
-    for i_m in range(len(nu_sw)):
-        nu=nu_sw[i_m]
-        print(i_m,nu)#,end='\r')
-        
-        params_lead['nu']=nu
-        num_refl,Revecs_l,Tevecs_l= sample_modes(Nx,Lx,Ls,'lead',E_lead,params_lead)
-        print('Re (%d) Rh (%d) T (%d)' % (num_refl[0],num_refl[1]-num_refl[0], Tevecs_l.shape[1]))
+    for i_E in range(len(Esw)):
+        print(i_E,end='\r')
 
-        params['nu']=nu
-        Tevecs= sample_modes(Nx,Lx,Ls,'sample',E_sample,params)
-        if Tevecs.shape[1]!=8*Nx:
-            print('sample T (%d)' % (Tevecs.shape[1]))
+        Tevecs= sample_modes(Nx,Lx,Ls,'sample',Esw[i_E],params)
 
         Psi_t=np.concatenate((-Revecs_l,Tevecs),axis=1)
         x=sp.linalg.solve(Psi_t,Tevecs_l)
 
-        if x.shape[1]>1:
-            Ree[i_m] = np.sum(np.sum(np.abs(x[:num_refl[0],:])**2,axis=0))
-            Reh[i_m] = np.sum(np.sum(np.abs(x[num_refl[0]:num_refl[1],:])**2,axis=0))
-        else:
-            Ree[i_m] = np.sum(np.abs(x[:num_refl[0]])**2,axis=0)
-            Reh[i_m] = np.sum(np.abs(x[num_refl[0]:num_refl[1]])**2,axis=0)
+        Ree[i_E]=np.real(np.trace(np.dot(np.matrix(x[:4*Nx,:]).H,x[:4*Nx,:])))
+        Reh[i_E]=np.real(np.trace(np.dot(np.matrix(x[4*Nx:8*Nx,:]).H,x[4*Nx:8*Nx,:])))
 
-    np.savez(fname, nu_list=nu_sw, Ree=Ree , Reh=Reh)
+    np.savez(fname, E_list=Esw, Ree=Ree , Reh=Reh)
 
     elapsed = time.time() - t_timer
     print("Finished, elapsed time = %.0f " % (elapsed)+ "sec")
@@ -266,4 +270,5 @@ def main():
 # Call the main function if the script gets executed (as opposed to imported).
 if __name__ == '__main__':
     main()
+
 
