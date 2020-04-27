@@ -202,6 +202,13 @@ def plane_waves_T(Nx,Nd,Ld,Lx,Ls):
         evec[:,4*n:4*n+4]= np.kron(v_p,np.kron(c.conj(),v_pos))/np.linalg.norm(c)
     return evec
 
+def y0out(k,Ld,Lx,Ls):
+    with np.errstate(divide='ignore', invalid='ignore'):
+        c= (np.exp(1j*k*Ls/2)-np.exp(1j*k*(Ld+Ls/2)) )/(-1j*k)/(2*Lx+Ls)
+        c[ ~ np.isfinite( c )] = Ld/(2*Lx+Ls)
+    return c
+
+
 
 def main():
 
@@ -210,22 +217,22 @@ def main():
     Nx=200
 
     D1=0.5*hwc #10*meV
-    D2=0.3*hwc #10*meV
-    m_n=0.*hwc
+    D2=0.6*hwc #10*meV
+    m_n=0.1*hwc
 
-    lRx= 0.5*hwc
+    lRx= 1.0*hwc
     lRy= 0.*hwc
     lso= 0.*hwc
     gs=0.0*hwc
-    gn=0.2*hwc
+    gn=0.3*hwc
 
-    nu=0.4
+    nu=0.85
     m_sc=3*hwc 
     mu_sc=8*hwc
     params=dict(nu=nu, m_n=m_n, mu_sc=mu_sc, m_sc=m_sc, D1=D1, D2=D2,\
                 lRx=lRx, lRy=lRy, lso=lso, gs=gs, gn=gn)
 
-    Esw=np.linspace(-1,1,50)*0.02*hwc
+    Esw=np.linspace(-1,1,200)*0.04*hwc
 
     Ree=np.zeros(len(Esw))
     Reh=np.zeros(len(Esw))
@@ -237,9 +244,13 @@ def main():
     Revecs_l_p=np.kron(v_p,np.kron(np.eye(4*Nx),v_neg))
     Revecs_l_h=np.kron(v_h,np.kron(np.eye(4*Nx),v_pos))
     Revecs_l= np.concatenate((Revecs_l_p,Revecs_l_h),axis=1)
+    [k1,k2]=2*pi*np.mgrid[range(Nx),range(Nx)]/(2*Lx+Ls)-pi*Nx/(2*Lx+Ls)
+
     Nd= int(Nx/4)
     Ld=Lx
-    Tevecs_l= plane_waves_T(Nx,Nd,Ld,Lx,Ls)
+#     Tevecs_l= plane_waves_T(Nx,Nd,Ld,Lx,Ls)
+    Xmat=np.kron(s00,y0out(k2-k1,Ld,Lx,Ls))
+    Tevecs_l=np.kron(v_p,np.kron(np.eye(4*Nx),v_pos))
 
     out_dir='cont_data_files/'
     f1='cond_paw_vs_E_Nx_%d_Lxs_%d_%d_nu_%.2f_mn_%.2f_ms_%.2f_mus_%.2f_D12_%.2f_%.2f_lxys_%.2f_%.2f_%.2f_gsn_%.2f_%.2f.npz' %\
@@ -259,8 +270,11 @@ def main():
         Psi_t=np.concatenate((-Revecs_l,Tevecs),axis=1)
         x=sp.linalg.solve(Psi_t,Tevecs_l)
 
-        Ree[i_E]=np.real(np.trace(np.dot(np.matrix(x[:4*Nx,:]).H,x[:4*Nx,:])))
-        Reh[i_E]=np.real(np.trace(np.dot(np.matrix(x[4*Nx:8*Nx,:]).H,x[4*Nx:8*Nx,:])))
+#         Ree[i_E]=np.real(np.trace(np.dot(np.matrix(x[:4*Nx,:]).H,x[:4*Nx,:])))
+#         Reh[i_E]=np.real(np.trace(np.dot(np.matrix(x[4*Nx:8*Nx,:]).H,x[4*Nx:8*Nx,:])))
+        Ree[i_E]=np.real( np.trace( np.dot( x[:4*Nx,:], np.dot(np.dot(Xmat.conj(),np.matrix(x[:4*Nx,:]).H ) , Xmat ) ) ))
+        Reh[i_E]=np.real( np.trace( np.dot( x[4*Nx:8*Nx,:], np.dot(np.dot(Xmat.conj(),np.matrix(x[4*Nx:8*Nx,:]).H ) , Xmat ) ) ))
+
 
     np.savez(fname, E_list=Esw, Ree=Ree , Reh=Reh)
 
