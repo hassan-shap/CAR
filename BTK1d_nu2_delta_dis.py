@@ -6,9 +6,9 @@ from scipy.linalg import block_diag
 import time
 
 
-D1=0.2
+D1=0.1
 D1t=0.
-D2=0.4
+D2=0.2
 k0u=2.2
 k0d=1.
 
@@ -22,13 +22,15 @@ s_dn=(s0-sz)/2
 
 # T matrix with random disorder
 
-Nrep=1000
-Nimp=80
+Nrep=100
+Nimp=40
 L=40/D2
 dl=L/Nimp
-Z=0.4
-Esw= np.linspace(-4.1,4.1,100)
-    
+Z=0.6
+# Esw= np.linspace(-4.4,4.4,40)
+Esw= np.linspace(0,4.4,100)
+Esw=Esw[4:]
+
 out_dir='Dis1d_data_files/'
 f1='nu2_delta_D12_%.2f_%.2f_Z_%.2f_Ni_%d_L_%d' % (D1,D2,Z,Nimp,int(L*D1))
 print(f1)
@@ -56,13 +58,19 @@ Hd= np.linalg.inv(vk)
 
 t0=time.time()
 np.random.seed()
-Dmat=(np.random.rand(Nimp,Nrep)-0.5)
+# Dmat=(np.random.rand(Nimp,Nrep)-0.5)
+Dmat=np.exp(1j*2*pi*np.random.rand(Nimp,Nrep))
 D1s=D1*Dmat
 D2s=D2*Dmat
+x_imp_mat=np.random.rand(Nimp-1,Nrep)*L
+
 
 for i_r in range(Nrep):
     print(' ',i_r,end=' \r')
-    
+    x_imp= np.sort(x_imp_mat[:,i_r])
+    x_imp=np.concatenate(([0],x_imp,[L]))
+
+
     for i_E in range(len(Esw)):
         E=Esw[i_E]
         
@@ -70,12 +78,16 @@ for i_r in range(Nrep):
         for i_n in range(Nimp):
             Ham=  - k0u* np.kron(sz,np.kron(s0,s_up))\
                     - k0d* np.kron(sz,np.kron(s0,s_dn))\
-                    + D1s[i_n,i_r]*np.kron(sy,np.kron(sx,sy))\
+                    + np.real(D1s[i_n,i_r])*np.kron(sy,np.kron(sx,sy))\
+                    + np.imag(D1s[i_n,i_r])*np.kron(sx,np.kron(sx,sy))\
                     + D1t*np.kron(sy,np.kron(s0,sy))\
-                    + D2s[i_n,i_r]*np.kron(sy,np.kron(sy,s0))
+                    + np.real(D2s[i_n,i_r])*np.kron(sy,np.kron(sy,s0))\
+                    + np.imag(D2s[i_n,i_r])*np.kron(sx,np.kron(sy,s0))
 
-            Tmat=np.dot(sp.linalg.expm(1j*np.dot(Hd,E*np.eye(8)-  Ham)*dl),Tmat)
-            
+#             Tmat=np.dot(sp.linalg.expm(1j*np.dot(Hd,E*np.eye(8)-  Ham)*dl),Tmat)
+            Tmat=np.dot(sp.linalg.expm(1j*np.dot(Hd,E*np.eye(8)-  Ham)*(x_imp[i_n+1]-x_imp[i_n])),Tmat)
+
+
         Tt=np.dot(Tr,Tmat)
         TLL=Tt[np.ix_([4,5,6,7],[4,5,6,7])]
         TLR=Tt[np.ix_([4,5,6,7],[0,1,2,3])]
