@@ -1,0 +1,2 @@
+bands_nu_0.450_Lxs_8_6_l_0.00_Nx_140.npz
+Finished, elapsed time = 447 sec

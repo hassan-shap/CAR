@@ -170,28 +170,43 @@ def main():
 
     # plot k points at minima vs nu
     Lx=8*lB
-    Nx=200
+    Nx=100
 
-    D1=0.5*hwc #10*meV
-    D2=0.6*hwc #10*meV
-    m_n=0.1*hwc
+#     D1=0.5*hwc #10*meV
+#     D2=0.6*hwc #10*meV
+#     m_n=0.1*hwc
 
-    lRx= 1.*hwc
+#     lRx= 1.*hwc
+#     lRy= 0.*hwc
+#     lso= 0.*hwc
+#     gs=0.0*hwc
+#     gn=0.3*hwc
+
+#     nu=0.55
+    D1=0.2*hwc 
+    D2=0.2*hwc 
+    m_n=0.001*hwc
+
+    lRx= 1*hwc
     lRy= 0.*hwc
     lso= 0.*hwc
     gs=0.0*hwc
-    gn=0.3*hwc
-
-    nu=0.55
+    gn=0.003*hwc
+    nu=0.003
+    
     m_sc=3*hwc 
     mu_sc=8*hwc
     params=dict(m_n=m_n, mu_sc=mu_sc, m_sc=m_sc, D1=D1, D2=D2,\
                 lRx=lRx, lRy=lRy, lso=lso, gs=gs, gn=gn)
 
     out_dir='cont_data_files/'
-    f1='Eg_fine2_paw_vs_Ls_Nx_%d_Lxs_%d_nu_%.2f_mn_%.2f_ms_%.2f_mus_%.2f_D12_%.2f_%.2f_lxys_%.2f_%.2f_%.2f_gsn_%.2f_%.2f.npz' %\
+#     f1='Eg_fine2_paw_vs_Ls_Nx_%d_Lxs_%d_nu_%.2f_mn_%.2f_ms_%.2f_mus_%.2f_D12_%.2f_%.2f_lxys_%.2f_%.2f_%.2f_gsn_%.2f_%.2f.npz' %\
+#           (Nx,Lx/lB,nu,m_n/hwc,m_sc/hwc,mu_sc/hwc,\
+#            D1/hwc,D2/hwc,lRx/hwc,lRy/hwc,lso/hwc,gs/hwc,gn/hwc)
+    f1='Eg_fine2_paw_vs_Ls_Nx_%d_Lxs_%d_nu_%.3f_mn_%.3f_ms_%.2f_mus_%.2f_D12_%.2f_%.2f_lxys_%.2f_%.2f_%.2f_gsn_%.2f_%.3f.npz' %\
           (Nx,Lx/lB,nu,m_n/hwc,m_sc/hwc,mu_sc/hwc,\
            D1/hwc,D2/hwc,lRx/hwc,lRy/hwc,lso/hwc,gs/hwc,gn/hwc)
+
 
 
     print(f1)
@@ -200,7 +215,7 @@ def main():
     t_timer=time.time()
 
     E_sample= 0*hwc
-    Ls_sw=np.linspace(12,15,250)
+    Ls_sw=np.linspace(6,10,50)
 
     kps=np.zeros((4,len(Ls_sw)))
     Egs=np.zeros((4,len(Ls_sw)))

@@ -172,17 +172,26 @@ def main():
     # plot k points at minima vs nu
     Ls=6*lB
     Lx=8*lB
-    Nx=200
+    Nx=100
 
-    D1=0.5*hwc #10*meV
-    D2=0.6*hwc #10*meV
-    m_n=0.1*hwc
+#     D1=0.5*hwc #10*meV
+#     D2=0.6*hwc #10*meV
+#     m_n=0.1*hwc
 
-    lRx= 1.*hwc
+#     lRx= 1.*hwc
+#     lRy= 0.*hwc
+#     lso= 0.*hwc
+#     gs=0.0*hwc
+#     gn=0.3*hwc
+    D1=0.2*hwc 
+    D2=0.2*hwc 
+    m_n=0.06*hwc
+
+    lRx= 0.01*hwc
     lRy= 0.*hwc
     lso= 0.*hwc
     gs=0.0*hwc
-    gn=0.3*hwc
+    gn=0.2*hwc
 
     m_sc=3*hwc 
     mu_sc=8*hwc
@@ -202,7 +211,8 @@ def main():
     H_0, H_mu = Hamiltonian_builder(Nx,Lx,Ls,params)
     
     E_sample= 0*hwc
-    nu_sw=np.linspace(0.21,1.4,200)
+    nu_sw=np.linspace(0.2,0.75,50)
+#     nu_sw=np.linspace(0.21,1.4,200)
     # nu_sw=np.array([1.0])
     kps=np.zeros((8,len(nu_sw)))
     Egs=np.zeros((8,len(nu_sw)))

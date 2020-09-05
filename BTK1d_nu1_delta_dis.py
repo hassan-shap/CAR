@@ -21,10 +21,10 @@ Nrep=100
 Nimp=40
 L=40/D1
 dl=L/Nimp
-Z=.6
+Z=1
 # Esw= np.linspace(-4.4,4.4,40)
 Esw= np.linspace(0,4.4,100)
-Esw=Esw[4:]
+# Esw=Esw[4:]
     
 out_dir='Dis1d_data_files/'
 f1='nu1_delta_D12_%.2f_%.2f_Z_%.2f_Ni_%d_L_%d' % (D1,D2,Z,Nimp,int(L*D1))

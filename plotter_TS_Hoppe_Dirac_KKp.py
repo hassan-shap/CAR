@@ -12,30 +12,62 @@ elec=1.6e-19
 meV=elec*1e-3
 
 vF=1e6
-B=10 # Tesla
+# B=10 # Tesla
+# hwc=vF*sqrt(2*hbar*elec*B)
+# lB=np.sqrt(hbar/(elec*B))
+# m_sc=3*hwc #1e2*meV
+# mu_sc=8*hwc #1e2*meV
+# D1=0.5*hwc #10*meV
+# D2=0.6*hwc #10*meV
+# nu=0.3#sqrt(2)+0.1
+# mu_n=nu*hwc #10*meV
+# m_n=0.1*hwc
+
+# lRx= 1*hwc
+# lRy= 0.*hwc
+# lso= 0.*hwc
+# gs=0.0*hwc
+# gn=0.3*hwc
+# new parameters
+
+B=6 # Tesla
 hwc=vF*sqrt(2*hbar*elec*B)
 lB=np.sqrt(hbar/(elec*B))
 m_sc=3*hwc #1e2*meV
 mu_sc=8*hwc #1e2*meV
-D1=0.5*hwc #10*meV
-D2=0.6*hwc #10*meV
-nu=0.55#sqrt(2)+0.1
-mu_n=nu*hwc #10*meV
-m_n=0.1*hwc
+# D1=0.02*hwc #10*meV
+# D2=0.02*hwc #10*meV
+# nu=0.0055#sqrt(2)+0.1
+# mu_n=nu*hwc #10*meV
+# m_n=0.001*hwc
 
-lRx= 0*hwc
+# lRx= 0.01*hwc
+# print(lRx/hwc)
+# lRy= 0.*hwc
+# lso= 0.*hwc
+# gs=0.0*hwc
+# gn=0.003*hwc
+D1=0.3*hwc 
+D2=0.2*hwc 
+m_n=0.06*hwc
+
+lRx= 0.2*hwc
 lRy= 0.*hwc
 lso= 0.*hwc
-# lam=0.5*vF
 gs=0.0*hwc
-gn=0.3*hwc
-
-ky_sw=np.linspace(-1,1,201)*2.5/lB
-# ky_sw=np.linspace(0.5,1.5,201)/lB
+gn=0.2*hwc
+nu=0.45
+mu_n=nu*hwc 
 
 Ls=6*lB
 Lx=8*lB
-Nx=200
+
+ky_sw=np.linspace(0,2,200)*1/lB
+# ky_sw=np.linspace(0.5,1.5,201)/lB
+
+# Ls=6*lB
+# Lx=8*lB
+Nx=140
 kx=2*pi*np.arange(Nx)/(2*Lx+Ls)-pi*Nx/(2*Lx+Ls)
 [k1,k2]=2*pi*np.mgrid[range(Nx),range(Nx)]/(2*Lx+Ls)-pi*Nx/(2*Lx+Ls)
 
@@ -111,12 +143,17 @@ HzT= np.kron(s03, np.kron(Hz_upT,sigma0) )
 
 t_timer=time.time()
 
-if lRx>0:
-    fname='TS_Hoppe_Lxs_%d_%d_Nx_%d_nu_%.2f.pdf' % (Lx/lB,Ls/lB,Nx,nu)
-else:
-    fname='TS_Hoppe_no_SO_Lxs_%d_%d_Nx_%d_nu_%.2f.pdf' % (Lx/lB,Ls/lB,Nx,nu)
+# if lRx>0:
+#     fname='TS_Hoppe_Lxs_%d_%d_Nx_%d_nu_%.2f.pdf' % (Lx/lB,Ls/lB,Nx,nu)
+# else:
+#     fname='TS_Hoppe_no_SO_Lxs_%d_%d_Nx_%d_nu_%.2f.pdf' % (Lx/lB,Ls/lB,Nx,nu)
     
-print(fname)
+# print(fname)
+
+# assuming lRx>0
+# f1= 'bands_nu_%.3f_Lxs_%d_%d_Nx_%d.npz' % (nu,Lx/lB,Ls/lB,Nx)
+f1= 'bands_nu_%.3f_Lxs_%d_%d_l_%.2f_Nx_%d.npz' % (nu,Lx/lB,Ls/lB,lRx/hwc,Nx)
+print(f1)
 
 
 En=np.zeros((16*Nx,len(ky_sw)))
@@ -136,18 +173,25 @@ elapsed = time.time() - t_timer
 print("Finished, elapsed time = %.0f " % (elapsed)+ "sec")
 
 
+out_dir = 'LL_bands_new/' 
+fname = out_dir+f1
+# np.savez(fname, kps=ky_sw , En=En, evecs=Vn[:,8*Nx-1:8*Nx+1,:])
+np.savez(fname, kps=ky_sw , En=En)
+
+
+
 ##### plot for notes
 
-plt.figure(figsize=(5,4))
-plt.plot(ky_sw*lB,En.T/hwc,'b')
+# plt.figure(figsize=(5,4))
+# plt.plot(ky_sw*lB,En.T/hwc,'b')
 
-fsize=16
-plt.ylabel(r"$\varepsilon/\varepsilon_0$",fontsize = fsize)
-plt.xlabel(r"$k_y \ell_B$",fontsize = fsize)
-plt.ylim(-0.5,0.5)
-# plt.xlim(-1,4)
-# plt.xticks(np.arange(-4,4.1,2))
-# plt.yticks(np.arange(-2,2.1,1))
-# plt.legend(loc='upper right')
-plt.tight_layout()
-plt.savefig('figs/'+fname)
+# fsize=16
+# plt.ylabel(r"$\varepsilon/\varepsilon_0$",fontsize = fsize)
+# plt.xlabel(r"$k_y \ell_B$",fontsize = fsize)
+# plt.ylim(-0.5,0.5)
+# # plt.xlim(-1,4)
+# # plt.xticks(np.arange(-4,4.1,2))
+# # plt.yticks(np.arange(-2,2.1,1))
+# # plt.legend(loc='upper right')
+# plt.tight_layout()
+# plt.savefig('figs/'+fname)
