@@ -140,7 +140,7 @@ def compute_conductance(syst, energies, params):
         
         wf_arr[:,:,i_e]= wfs(0)
     return Pe, Ph, wf_arr
-    
+
 def main():
     Wsc=120
     W=Wsc+40
@@ -182,7 +182,7 @@ def main():
 
         fname=f1+ '_r_%d.npz' % (i_r)
         np.savez(fname, E_list=E_list, Pe=Pe, Ph=Ph, wf_arr=wf_arr)
-    
+
 # Call the main function if the script gets executed (as opposed to imported).
 if __name__ == '__main__':
     main()

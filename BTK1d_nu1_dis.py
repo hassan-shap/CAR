@@ -27,7 +27,7 @@ Esw= np.linspace(-1.1,1.1,100)
 Ham=  -k0* np.kron(sz,s0) +D1*np.kron(sy,sy) #+ G* np.kron(sz,sx)
 vk= np.kron(s0,sz)+ D2*np.kron(sx,s0)
 Hd= np.linalg.inv(vk)
-    
+
 out_dir='Dis1d_data_files/'
 f1='nu1_D2_%.2f_Z_%.2f_Ni_%d_U_%.2f_L_%d' % (D2,Z,Nimp,Uimp,int(L*D1))
 print(f1)

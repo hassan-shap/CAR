@@ -38,7 +38,7 @@ elec=1.6e-19
 meV=elec*1e-3
 
 vF=1e6
-B=10 # Tesla
+B=6 # Tesla
 hwc=vF*sqrt(2*hbar*elec*B)
 lB=np.sqrt(hbar/(elec*B))
 
@@ -216,17 +216,17 @@ def main():
     Lx=8*lB
     Nx=200
 
-    D1=0.5*hwc #10*meV
-    D2=0.6*hwc #10*meV
-    m_n=0.1*hwc
+    D1=0.3*hwc #10*meV
+    D2=0.2*hwc #10*meV
+    m_n=0.06*hwc
 
-    lRx= 1.0*hwc
+    lRx= 0.2*hwc
     lRy= 0.*hwc
     lso= 0.*hwc
     gs=0.0*hwc
-    gn=0.3*hwc
+    gn=0.1*hwc
 
-    nu=0.85
+    nu=0.3
     m_sc=3*hwc 
     mu_sc=8*hwc
     params=dict(nu=nu, m_n=m_n, mu_sc=mu_sc, m_sc=m_sc, D1=D1, D2=D2,\

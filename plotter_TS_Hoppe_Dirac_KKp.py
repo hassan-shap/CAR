@@ -147,7 +147,7 @@ t_timer=time.time()
 #     fname='TS_Hoppe_Lxs_%d_%d_Nx_%d_nu_%.2f.pdf' % (Lx/lB,Ls/lB,Nx,nu)
 # else:
 #     fname='TS_Hoppe_no_SO_Lxs_%d_%d_Nx_%d_nu_%.2f.pdf' % (Lx/lB,Ls/lB,Nx,nu)
-    
+
 # print(fname)
 
 # assuming lRx>0
@@ -180,7 +180,7 @@ np.savez(fname, kps=ky_sw , En=En)
 
 
 
-##### plot for notes
+# #### plot for notes
 
 # plt.figure(figsize=(5,4))
 # plt.plot(ky_sw*lB,En.T/hwc,'b')
