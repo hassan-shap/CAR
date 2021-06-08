@@ -167,9 +167,9 @@ def compute_conductance(syst, energies, params):
 #             # construct the wf array to be saved
 #             print( "Dimension of scattering wf = "+ str(wfs(0).shape) ) 
 #             wf_arr=np.zeros((wfs(0).shape[0],wfs(0).shape[1],len(energies)),dtype=np.complex64)
-        
+
     return Pu, Pd
-    
+
 
 def main():
     W=40
@@ -214,7 +214,7 @@ def main():
 
         fname=f1+ '_r_%d.npz' % (i_r)
         np.savez(fname, E_list=E_list, Pu=Pu , Pd=Pd)
-    
+
 # Call the main function if the script gets executed (as opposed to imported).
 if __name__ == '__main__':
     main()

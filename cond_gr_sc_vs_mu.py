@@ -198,7 +198,7 @@ def main():
 
         fname=f1+ '_r_%d.npz' % (i_r)
         np.savez(fname, mu_list=mu_list, Pu=Pu , Pd=Pd)
-    
+
 # Call the main function if the script gets executed (as opposed to imported).
 if __name__ == '__main__':
     main()

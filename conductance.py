@@ -138,7 +138,7 @@ def compute_conductance(syst, energies, params):
         
         wf_arr[:,:,i_e]= wfs(0)
     return Pe, Ph, wf_arr
-    
+
 def main():
     Wsc=120
     W=Wsc+40
@@ -171,7 +171,7 @@ def main():
     out_dir='kw_data_files/'
     fname=out_dir+ 'phi_%.2f_mu_%.2f_mus_%.2f_D_%.2f_tj_%.2f_W_%d_L_%d_Ws_%d_Ls_%d.npz' % (phi,mu,mu_sc,Delta,t_j,W,L,Wsc,Lsc)
     np.savez(fname, E_list=E_list, Pe=Pe, Ph=Ph, wf_arr=wf_arr)
-    
+
 # Call the main function if the script gets executed (as opposed to imported).
 if __name__ == '__main__':
     main()
